@@ -67,10 +67,34 @@ class Tag extends \yii\db\ActiveRecord
                     $tag->save();
                 }
             }
+        }else{
+            return false;
         }
     }
 
     public static function removeTags($tags){
+        if (empty($tags))return false;
+        foreach ($tags as $name){
+            $aTag = Tag::find()->where(['name'=>$name])->one();
+            if ($aTag){
+                if ($aTag->frequency<=1){
+                    $aTag->delete();
+                }else{
+                    $aTag->frequency -= 1;
+                    $aTag->save();
+                }
+            }
 
+        }
+    }
+
+    public static function updateTags($oldTags,$newTags){
+        if (!empty($oldTags) || !empty($newTags)){
+            $oldTagsArr = self::string2array($oldTags);
+            $newTagsArr = self::string2array($newTags);
+
+            self::addTags(array_values(array_diff($newTagsArr,$oldTagsArr)));
+            self::removeTags(array_values(array_diff($oldTagsArr,$newTagsArr)));
+        }
     }
 }
