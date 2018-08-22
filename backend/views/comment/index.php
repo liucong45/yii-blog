@@ -15,21 +15,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Create Comment', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'content:ntext',
-            'status',
-            'create_time:datetime',
-            'userid',
+            ['attribute'=>'id','contentOptions'=>['width'=>'30px']],
+            ['attribute'=>'content','value'=>'beginning'],
+            ['attribute'=>'status','value'=>'status0.name','filter'=>\common\models\Commentstatus::find()->select(['name','id'])->orderBy('position')->indexBy('id')->column()],
+            ['attribute'=>'create_time','format'=>['date','php:Y-m-d H:i']],
+            ['attribute'=>'user.username','label'=>'作者','value'=>'user.username'],
+            'post.title',
             //'email:email',
             //'url:url',
             //'post_id',
