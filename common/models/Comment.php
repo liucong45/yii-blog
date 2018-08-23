@@ -93,4 +93,25 @@ class Comment extends \yii\db\ActiveRecord
 
         return mb_substr($tmpstr,0,20,'utf-8').(($tmplen>20)?'...':'');
     }
+
+    public function approve(){
+        $this->status=2;
+        return ($this->save()?true:false);
+    }
+
+    public static function getPengdingCommentCount(){
+        return Comment::find()->where(['status'=>1])->count();
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)){
+            if (!$insert){
+                $this->create_time=time();
+            }
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

@@ -21,7 +21,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['attribute'=>'id','contentOptions'=>['width'=>'30px']],
             ['attribute'=>'content','value'=>'beginning'],
-            ['attribute'=>'status','value'=>'status0.name','filter'=>\common\models\Commentstatus::find()->select(['name','id'])->orderBy('position')->indexBy('id')->column()],
+            [
+            'attribute'=>'status',
+            'value'=>'status0.name',
+            'filter'=>\common\models\Commentstatus::find()->select(['name','id'])->orderBy('position')->indexBy('id')->column(),
+            'contentOptions'=>function($model){
+                return ($model->status==1)?['class'=>'bg-danger']:[];
+            }
+            ],
             ['attribute'=>'create_time','format'=>['date','php:Y-m-d H:i']],
             ['attribute'=>'user.username','label'=>'作者','value'=>'user.username'],
             'post.title',
@@ -29,7 +36,21 @@ $this->params['breadcrumbs'][] = $this->title;
             //'url:url',
             //'post_id',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+            'template' => '{view}{update}{delete}{approve}',
+            'buttons' => [
+                    'approve'=>function($url,$model,$key){
+                        $options = [
+                            'title'=>Yii::t('yii','审核'),
+                            'aria-label'=>Yii::t('yii','审核'),
+                            'data-confirm'=>Yii::t('yii','你确定要通过这条评论吗？'),
+                            'data-method'=>'post',
+                            'data-pjax'=>'0',
+                        ];
+                        return Html::a('<span class="glyphicon glyphicon-check"></span>',$url,$options);
+                    },
+            ],
+            ],
         ],
     ]); ?>
 </div>
