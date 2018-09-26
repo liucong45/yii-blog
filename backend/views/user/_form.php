@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use common\models\User;
 /* @var $this yii\web\View */
 /* @var $model common\models\User */
 /* @var $form yii\widgets\ActiveForm */
@@ -12,10 +12,12 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'status')->textInput() ?>
+    <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'status')->dropDownList((new User)->allStatus(),['prompt'=>'请选择状态']) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

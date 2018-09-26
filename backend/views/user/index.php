@@ -24,18 +24,19 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
+//            'id',
             'username',
-            'auth_key',
-            'password_hash',
-            'password_reset_token',
-            //'email:email',
+//            'auth_key',
+//            'password_hash',
+//            'password_reset_token',
+            'email:email',
             //'status',
+            ['attribute'=>'status','value'=>'statusStr'],
             //'created_at',
+            ['attribute'=>'created_at','format'=>['date','php:Y-m-d H:i:s']],
             //'updated_at',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            ['attribute'=>'updated_at','format'=>['date','php:Y-m-d H:i:s']],
+            ['class' => 'yii\grid\ActionColumn','template'=>'{update}'],
         ],
     ]); ?>
 </div>
