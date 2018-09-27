@@ -35,7 +35,7 @@ class Adminuser extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             [['username', 'nickname', 'password', 'email'], 'required'],
-            [['password_hash', 'password_reset_token', 'auth_key', 'username', 'nickname', 'password', 'email'], 'required'],
+            [['password_hash', 'auth_key', 'username', 'nickname', 'password', 'email'], 'required'],
             [['profile'], 'string'],
             [['password_hash', 'password_reset_token', 'auth_key', 'username', 'nickname', 'password', 'email'], 'string', 'max' => 128],
             [['password_hash', 'password_reset_token'], 'string', 'max' => 255],
@@ -54,9 +54,9 @@ class Adminuser extends \yii\db\ActiveRecord implements IdentityInterface
             'password_hash' => 'Password Hash',
             'password_reset_token' => 'Password Reset Token',
             'auth_key' => 'Auth Key',
-            'username' => 'Username',
-            'nickname' => 'Nickname',
-            'password' => 'Password',
+            'username' => '用户名',
+            'nickname' => '昵称',
+            'password' => '密码',
             'email' => 'Email',
             'profile' => 'Profile',
         ];

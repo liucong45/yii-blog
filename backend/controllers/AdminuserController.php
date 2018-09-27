@@ -8,7 +8,7 @@ use common\models\AdminuserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use backend\models\SignupForm;
 /**
  * AdminuserController implements the CRUD actions for Adminuser model.
  */
@@ -64,10 +64,12 @@ class AdminuserController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Adminuser();
+        $model = new SignupForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($user = $model->signup()) {
+                return $this->redirect(['view', 'id' => $model->id]); 
+            }            
         }
 
         return $this->render('create', [
