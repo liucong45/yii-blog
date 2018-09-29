@@ -5,6 +5,8 @@ namespace backend\controllers;
 use Yii;
 use common\models\Adminuser;
 use common\models\AdminuserSearch;
+use common\models\AuthItem;
+use common\models\authAssignment;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -143,5 +145,12 @@ class AdminuserController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionPrivilese($id){
+        $allPrivileges = (new AuthItem)->getAllPrivileges();
+        $authAssignment = (new authAssignment)->getAllAssignment($id);
+        return $this->redirect(['privilese']);
+        // return $this->redirect(['privilese',['id'=>$id,'authAssignment'=>$authAssignment,'allPrivileges'=>$allPrivileges]]);
     }
 }
