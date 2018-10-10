@@ -1,20 +1,18 @@
 <?php
 
-namespace backend\controllers;
+namespace frontend\controllers;
 
 use Yii;
-use common\models\Adminuser;
-use common\models\AdminuserSearch;
-use common\models\AuthItem;
-use common\models\authAssignment;
+use common\models\Post;
+use common\models\PostSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use backend\models\ResetpwdForm;
+
 /**
- * AdminuserController implements the CRUD actions for Adminuser model.
+ * PostController implements the CRUD actions for Post model.
  */
-class AdminuserController extends Controller
+class PostController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -32,12 +30,12 @@ class AdminuserController extends Controller
     }
 
     /**
-     * Lists all Adminuser models.
+     * Lists all Post models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new AdminuserSearch();
+        $searchModel = new PostSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -47,7 +45,7 @@ class AdminuserController extends Controller
     }
 
     /**
-     * Displays a single Adminuser model.
+     * Displays a single Post model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -60,18 +58,16 @@ class AdminuserController extends Controller
     }
 
     /**
-     * Creates a new Adminuser model.
+     * Creates a new Post model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new SignupForm();
+        $model = new Post();
 
-        if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
-                return $this->redirect(['view', 'id' => $model->id]); 
-            }            
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -80,25 +76,7 @@ class AdminuserController extends Controller
     }
 
     /**
-     * Creates a new Adminuser model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionResetpwd($id)
-    {
-        $model = new ResetpwdForm();
-
-        if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->resetPassword($id)) {
-                return $this->redirect(['index']); 
-            }            
-        }
-
-        return $this->render('resetpwd', ['model' => $model]);
-    }
-
-    /**
-     * Updates an existing Adminuser model.
+     * Updates an existing Post model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -118,7 +96,7 @@ class AdminuserController extends Controller
     }
 
     /**
-     * Deletes an existing Adminuser model.
+     * Deletes an existing Post model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -132,37 +110,18 @@ class AdminuserController extends Controller
     }
 
     /**
-     * Finds the Adminuser model based on its primary key value.
+     * Finds the Post model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Adminuser the loaded model
+     * @return Post the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Adminuser::findOne($id)) !== null) {
+        if (($model = Post::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-
-    public function actionPrivilege($id){
-
-        $allPrivileges = (new AuthItem)->getAllPrivileges();
-        $authAssignment = (new authAssignment)->getAllAssignment($id);
-
-        if (isset($_POST['newPri'])){
-            AuthAssignment::deleteAll('user_id=:id',[':id'=>$id]);
-            foreach($_POST['newPri'] as $value){
-                $aPri = new authAssignment();
-                $aPri->item_name = $value;
-                $aPri->user_id = $id;
-                $aPri->created_at = time();
-                $aPri->save();
-            }
-            return $this->redirect(['index']);
-        }
-        return $this->render('privilege',['id'=>$id,'authAssignment'=>$authAssignment,'allPrivileges'=>$allPrivileges]);
     }
 }
