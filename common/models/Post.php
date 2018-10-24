@@ -148,4 +148,8 @@ class Post extends \yii\db\ActiveRecord
     public function getCommentCount(){
         return Comment::find()->where(['post_id'=>$this->id,'status'=>2])->count();
     }
+
+    public function getActiveComments(){
+        return $this->hasMany(Comment::className(), ['post_id' => 'id'])->where('status=:status',[':status'=>2])->orderBy('id DESC');
+    }
 }
